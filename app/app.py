@@ -1,14 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask,request, jsonify
 import os
 import jwt
 
 app = Flask(__name__)
 
-# Възможни места за съхранение
 NFS_PATH = os.getenv("NFS_PATH", "/nfs")
 SECRET_KEY = 'mysecretkey'
 
-# Функция за проверка на JWT
 def authenticate_token():
     token = request.headers.get('Authorization')
     if not token:

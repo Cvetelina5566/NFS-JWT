@@ -1,0 +1,41 @@
+{
+    "realm": "file-manager",
+    "enabled": true,
+    "clients": [
+      {
+        "clientId": "file-manager-client",
+        "enabled": true,
+        "secret": "your-client-secret",
+        "redirectUris": ["http://localhost:5000/*"],
+        "publicClient": false,
+        "directAccessGrantsEnabled": true
+      }
+    ],
+    "roles": {
+      "realm": [
+        {
+          "name": "admin",
+          "description": "Administrator role"
+        },
+        {
+          "name": "user",
+          "description": "User role"
+        }
+      ]
+    },
+    "users": [
+      {
+        "username": "testuser",
+        "enabled": true,
+        "credentials": [
+          {
+            "type": "password",
+            "value": "password123",
+            "temporary": false
+          }
+        ],
+        "realmRoles": ["user"]
+      }
+    ]
+  }
+  
