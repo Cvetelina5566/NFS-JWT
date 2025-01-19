@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  nfs:
+    image: itsthenetwork/nfs-server-alpine:latest
+    container_name: nfs-server
+    volumes:
+      - nfs-data:/nfs
+    environment:
+      - NFS_EXPORT_1=/nfs *(rw,sync,no_subtree_check)
+    ports:
+      - "2049:2049"
+    networks:
+      - backend
+
+  keycloak:
+    image: jboss/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    depends_on:
+      - nfs
+
+  app:
+    build: ./app
+    container_name: file-manager-app
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
+      - NFS_SERVER=nfs-server
+      - NFS_PATH=/nfs
+    volumes:
+      - nfs-data:/nfs
+    ports:
+      - "5000:5000"
+    depends_on:
+      - keycloak
+      - nfs
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  nfs-data:
+    driver: local
